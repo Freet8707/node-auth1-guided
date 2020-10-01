@@ -1,6 +1,7 @@
 const express = require("express")
 const helmet = require("helmet")
 const cors = require("cors")
+const session = require("express-session")
 const usersRouter = require("./users/users-router")
 
 const server = express()
@@ -9,6 +10,16 @@ const port = process.env.PORT || 5000
 server.use(helmet())
 server.use(cors())
 server.use(express.json())
+server.use(session({
+	resave: false,
+	saveUninitialized: false,
+	secret: "keep it secret, keep it safe",  //cryptographically sign the cookie
+	cookie: {
+		maxAge: 1000 * 30,
+		secure: false,
+		httpOnly: true
+	}
+}))
 
 server.use(usersRouter)
 
